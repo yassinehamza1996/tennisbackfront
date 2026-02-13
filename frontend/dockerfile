@@ -1,0 +1,20 @@
+# 1️⃣ Build Angular
+FROM node:16 AS build
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install ngx-intl-tel-input@3.2.0 --legacy-peer-deps
+RUN npm install --legacy-peer-deps
+
+COPY . .
+RUN npm run build --prod
+
+# 2️⃣ Serve with Nginx
+FROM nginx:alpine
+
+COPY --from=build /app/dist/tennisBreakAcademy /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
