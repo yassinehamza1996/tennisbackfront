@@ -11,8 +11,7 @@ pipeline {
 
         stage('Clean') {
             steps {
-                 def mvnHome = tool name: 'Maven 3.9.0', type: 'maven'
-                bat "\"${mvnHome}\\bin\\mvn\"clean"
+                bat 'mvn clean'
             }
         }
 
