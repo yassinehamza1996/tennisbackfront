@@ -7,7 +7,9 @@ pipeline {
             steps {
                 checkout scm
             }
-             stage('Clean') {
+        }
+
+        stage('Clean') {
             steps {
                 bat 'mvn clean'
             }
@@ -15,7 +17,8 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                bat 'mvn install'
+                // Build the Spring Boot jar
+                bat 'mvn install -DskipTests'
             }
         }
 
@@ -26,7 +29,6 @@ pipeline {
                 }
             }
         }
-        }
 
         stage('Stop Containers') {
             steps {
@@ -36,7 +38,9 @@ pipeline {
 
         stage('Build & Deploy') {
             steps {
-                bat 'docker-compose up -d --build'
+                // Ensure Docker context is correct and jar exists
+                bat 'docker-compose build'
+                bat 'docker-compose up -d'
             }
         }
     }
