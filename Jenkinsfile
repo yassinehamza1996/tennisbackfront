@@ -15,22 +15,28 @@ pipeline {
 
         stage('Clean') {
             steps {
+                 dir('backend') {
                 bat 'mvn clean'
+                 }
             }
         }
 
         stage('Build & Test') {
             steps {
+                 dir('backend') {
                 // Build the Spring Boot jar
                 bat 'mvn install -DskipTests'
+                 }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
+                 dir('backend') {
                 withSonarQubeEnv('SonarQube') {
                     bat 'mvn sonar:sonar'
                 }
+                 }
             }
         }
 
